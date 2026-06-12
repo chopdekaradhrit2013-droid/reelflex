@@ -29,7 +29,7 @@ function AuthPage() {
     setBusy(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -38,6 +38,11 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        // Auto sign-in if no session was returned (e.g. email confirmation off but session missing)
+        if (!data.session) {
+          const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInErr) throw signInErr;
+        }
         toast.success("Welcome to ReelFlex!");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
