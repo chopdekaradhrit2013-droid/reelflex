@@ -38,13 +38,14 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        // Auto sign-in if no session was returned (e.g. email confirmation off but session missing)
         if (!data.session) {
-          const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInErr) throw signInErr;
+          toast.success("Royal invitation sent! Check your email to confirm your account.");
+          setBusy(false);
+          return;
         }
         toast.success("Welcome to ReelFlex!");
       } else {
+
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Welcome back");
