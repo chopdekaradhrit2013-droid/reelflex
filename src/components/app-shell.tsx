@@ -1,9 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Film, PlusSquare, MessageCircle, User, Sparkles } from "lucide-react";
+import { Home, Film, PlusSquare, MessageCircle, User, Sparkles, Crown } from "lucide-react";
 import type { ReactNode } from "react";
 import { useAuth } from "@/lib/use-auth";
 import { useQuery } from "@tanstack/react-query";
 import { db } from "@/lib/db";
+import { useMyMeta, isAdminRole } from "@/lib/use-profile";
+
 
 function useMyProfile() {
   const { user } = useAuth();
@@ -19,7 +21,9 @@ function useMyProfile() {
 
 export function AppShell({ children, hideNav }: { children: ReactNode; hideNav?: boolean }) {
   const { data: profile } = useMyProfile();
+  const { data: me } = useMyMeta();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const showAdmin = isAdminRole(me?.role);
 
   return (
     <div className="relative mx-auto flex min-h-screen w-full max-w-2xl flex-col bg-background">
@@ -29,16 +33,22 @@ export function AppShell({ children, hideNav }: { children: ReactNode; hideNav?:
           <span className="text-xl font-bold tracking-tight brand-gradient-text">ReelFlex</span>
         </Link>
         <div className="flex items-center gap-3">
+          {showAdmin && (
+            <Link to="/admin" aria-label="Admin" className="rounded-full p-2 hover:bg-accent/10">
+              <Crown className="h-5 w-5" style={{ color: "#ffd34d" }} />
+            </Link>
+          )}
           <Link to="/messages" aria-label="Messages" className="rounded-full p-2 hover:bg-accent/10">
             <MessageCircle className="h-5 w-5" />
           </Link>
           {profile?.username && (
             <Link to="/profile/$username" params={{ username: profile.username }} aria-label="Profile">
-              <Avatar url={profile.avatar_url} name={profile.username} size={32} />
+              <Avatar url={profile.avatar_url} name={profile.username} size={32} ring={!!me?.super_reelflex} />
             </Link>
           )}
         </div>
       </header>
+
 
       <main className="flex-1 pb-24">{children}</main>
 

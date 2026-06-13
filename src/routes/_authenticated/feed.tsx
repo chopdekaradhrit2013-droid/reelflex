@@ -3,8 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/app-shell";
 import { StoryStrip } from "@/components/story-strip";
 import { PostCard } from "@/components/post-card";
+import { AnnouncementsBar } from "@/components/announcements-bar";
 import { db, type Post } from "@/lib/db";
 import { useAuth } from "@/lib/use-auth";
+
 
 export const Route = createFileRoute("/_authenticated/feed")({
   head: () => ({ meta: [{ title: "Feed — ReelFlex" }] }),
@@ -43,6 +45,7 @@ function Feed() {
 
   return (
     <AppShell>
+      <AnnouncementsBar />
       <StoryStrip />
       {isLoading && <div className="px-4 py-10 text-center text-sm text-muted-foreground">Loading…</div>}
       {!isLoading && posts && posts.length === 0 && (
