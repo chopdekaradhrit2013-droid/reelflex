@@ -125,3 +125,4 @@ export function Avatar({ url, name, size = 40, ring }: { url?: string | null; na
     </div>
   );
 }
+
