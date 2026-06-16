@@ -57,7 +57,7 @@ function ReelsPage() {
   });
 
   async function share(reel: Reel) {
-    const url = reel.video_url;
+    const url = `${window.location.origin}/r/${reel.id}`;
     try {
       if (navigator.share) await navigator.share({ title: "ReelFlex", text: reel.caption ?? "Watch this reel!", url });
       else {

@@ -76,9 +76,13 @@ export function PostCard({ post }: { post: Post }) {
         </Link>
       </div>
 
-      <div className="aspect-square w-full overflow-hidden bg-muted">
+      <Link
+        to="/p/$postId"
+        params={{ postId: post.id }}
+        className="block aspect-square w-full overflow-hidden bg-muted"
+      >
         <img src={post.image_url} alt={post.caption ?? "post"} className="h-full w-full object-cover" loading="lazy" />
-      </div>
+      </Link>
 
       <div className="flex items-center gap-4 px-4 pt-3">
         <button onClick={() => toggleLike.mutate()} aria-label="Like" className="transition active:scale-90">
@@ -87,9 +91,22 @@ export function PostCard({ post }: { post: Post }) {
         <button onClick={() => setShowComments((s) => !s)} aria-label="Comments">
           <MessageCircle className="h-6 w-6" />
         </button>
-        <Link to="/messages" aria-label="Share" className="ml-auto">
+        <button
+          onClick={async () => {
+            const url = `${window.location.origin}/p/${post.id}`;
+            try {
+              if (navigator.share) await navigator.share({ url, title: "Post on ReelFlex" });
+              else {
+                await navigator.clipboard.writeText(url);
+                toast.success("Link copied");
+              }
+            } catch {}
+          }}
+          aria-label="Share"
+          className="ml-auto"
+        >
           <Send className="h-6 w-6" />
-        </Link>
+        </button>
       </div>
 
       <div className="px-4 pt-2 text-sm font-semibold">{post.like_count ?? 0} likes</div>
