@@ -77,7 +77,23 @@ function Chat() {
       if (!user || !text.trim()) return;
       const t = text.trim();
       setText("");
-      await db.from("messages").insert({ sender_id: user.id, recipient_id: userId, text: t });
+      const optimistic: Message = {
+        id: `tmp-${Date.now()}`,
+        sender_id: user.id,
+        recipient_id: userId,
+        text: t,
+        created_at: new Date().toISOString(),
+      };
+      qc.setQueryData<Message[]>(["dm", user.id, userId], (old) => [...(old ?? []), optimistic]);
+      const { data } = await db
+        .from("messages")
+        .insert({ sender_id: user.id, recipient_id: userId, text: t })
+        .select()
+        .single();
+      qc.setQueryData<Message[]>(["dm", user.id, userId], (old) =>
+        (old ?? []).map((m) => (m.id === optimistic.id ? (data as Message) ?? m : m)),
+      );
+      qc.invalidateQueries({ queryKey: ["threads", user.id] });
     },
   });
 
