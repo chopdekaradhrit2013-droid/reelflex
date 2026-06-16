@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { AppShell, Avatar } from "@/components/app-shell";
-import { db } from "@/lib/db";
+import { db, supabase } from "@/lib/db";
 import { useAuth } from "@/lib/use-auth";
 
 export const Route = createFileRoute("/_authenticated/messages")({
@@ -11,6 +12,27 @@ export const Route = createFileRoute("/_authenticated/messages")({
 
 function Inbox() {
   const { user } = useAuth();
+  const qc = useQueryClient();
+
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel(`inbox:${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages" },
+        (payload) => {
+          const m = payload.new as { sender_id: string; recipient_id: string };
+          if (m.sender_id === user.id || m.recipient_id === user.id) {
+            qc.invalidateQueries({ queryKey: ["threads", user.id] });
+          }
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, qc]);
 
   const { data: threads } = useQuery({
     queryKey: ["threads", user?.id],
