@@ -17,7 +17,6 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedReelsRouteImport } from './routes/_authenticated/reels'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
-import { Route as AuthenticatedEmojifyRouteImport } from './routes/_authenticated/emojify'
 import { Route as AuthenticatedCreateRouteImport } from './routes/_authenticated/create'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedProfileUsernameRouteImport } from './routes/_authenticated/profile.$username'
@@ -62,11 +61,6 @@ const AuthenticatedFeedRoute = AuthenticatedFeedRouteImport.update({
   path: '/feed',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedEmojifyRoute = AuthenticatedEmojifyRouteImport.update({
-  id: '/emojify',
-  path: '/emojify',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedCreateRoute = AuthenticatedCreateRouteImport.update({
   id: '/create',
   path: '/create',
@@ -96,7 +90,6 @@ export interface FileRoutesByFullPath {
   '/banned': typeof BannedRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/create': typeof AuthenticatedCreateRoute
-  '/emojify': typeof AuthenticatedEmojifyRoute
   '/feed': typeof AuthenticatedFeedRoute
   '/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/reels': typeof AuthenticatedReelsRoute
@@ -110,7 +103,6 @@ export interface FileRoutesByTo {
   '/banned': typeof BannedRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/create': typeof AuthenticatedCreateRoute
-  '/emojify': typeof AuthenticatedEmojifyRoute
   '/feed': typeof AuthenticatedFeedRoute
   '/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/reels': typeof AuthenticatedReelsRoute
@@ -126,7 +118,6 @@ export interface FileRoutesById {
   '/banned': typeof BannedRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/create': typeof AuthenticatedCreateRoute
-  '/_authenticated/emojify': typeof AuthenticatedEmojifyRoute
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/_authenticated/reels': typeof AuthenticatedReelsRoute
@@ -142,7 +133,6 @@ export interface FileRouteTypes {
     | '/banned'
     | '/admin'
     | '/create'
-    | '/emojify'
     | '/feed'
     | '/messages'
     | '/reels'
@@ -156,7 +146,6 @@ export interface FileRouteTypes {
     | '/banned'
     | '/admin'
     | '/create'
-    | '/emojify'
     | '/feed'
     | '/messages'
     | '/reels'
@@ -171,7 +160,6 @@ export interface FileRouteTypes {
     | '/banned'
     | '/_authenticated/admin'
     | '/_authenticated/create'
-    | '/_authenticated/emojify'
     | '/_authenticated/feed'
     | '/_authenticated/messages'
     | '/_authenticated/reels'
@@ -245,13 +233,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFeedRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/emojify': {
-      id: '/_authenticated/emojify'
-      path: '/emojify'
-      fullPath: '/emojify'
-      preLoaderRoute: typeof AuthenticatedEmojifyRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/create': {
       id: '/_authenticated/create'
       path: '/create'
@@ -299,7 +280,6 @@ const AuthenticatedMessagesRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedCreateRoute: typeof AuthenticatedCreateRoute
-  AuthenticatedEmojifyRoute: typeof AuthenticatedEmojifyRoute
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRouteWithChildren
   AuthenticatedReelsRoute: typeof AuthenticatedReelsRoute
@@ -310,7 +290,6 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedCreateRoute: AuthenticatedCreateRoute,
-  AuthenticatedEmojifyRoute: AuthenticatedEmojifyRoute,
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRouteWithChildren,
   AuthenticatedReelsRoute: AuthenticatedReelsRoute,
