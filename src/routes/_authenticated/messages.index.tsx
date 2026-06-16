@@ -5,7 +5,7 @@ import { AppShell, Avatar } from "@/components/app-shell";
 import { db, supabase } from "@/lib/db";
 import { useAuth } from "@/lib/use-auth";
 
-export const Route = createFileRoute("/_authenticated/messages")({
+export const Route = createFileRoute("/_authenticated/messages/")({
   head: () => ({ meta: [{ title: "Messages — ReelFlex" }] }),
   component: Inbox,
 });
