@@ -154,14 +154,20 @@ function Profile() {
 
         <div className="mt-3 grid grid-cols-3 gap-1">
           {posts?.map((p: any) => (
-            <div key={p.id} className="aspect-square overflow-hidden rounded bg-muted">
+            <Link
+              key={p.id}
+              to="/p/$postId"
+              params={{ postId: p.id }}
+              className="aspect-square overflow-hidden rounded bg-muted"
+            >
               <img src={p.image_url} alt="" className="h-full w-full object-cover" loading="lazy" />
-            </div>
+            </Link>
           ))}
           {reels?.map((r: any) => (
             <Link
               key={r.id}
-              to="/reels"
+              to="/r/$reelId"
+              params={{ reelId: r.id }}
               className="relative aspect-square overflow-hidden rounded bg-black"
             >
               {r.thumbnail_url ? (
