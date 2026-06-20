@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { AppShell, Avatar } from "@/components/app-shell";
 import { db, supabase } from "@/lib/db";
 import { useAuth } from "@/lib/use-auth";
+import { AnnouncementsBar } from "@/components/announcements-bar";
 
 export const Route = createFileRoute("/_authenticated/messages/")({
   head: () => ({ meta: [{ title: "Messages — ReelFlex" }] }),
@@ -70,6 +71,7 @@ function Inbox() {
 
   return (
     <AppShell>
+      <AnnouncementsBar />
       <div className="p-4">
         <h1 className="text-2xl font-bold">Messages</h1>
         {threads && threads.length > 0 ? (
